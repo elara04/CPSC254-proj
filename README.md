@@ -122,7 +122,7 @@ CREATE TABLE Course (
 );
 ```
 3. Populate the databse with inital data
-# Navigate to the sql directory
+## Navigate to the sql directory
 ```bash
 cd sql
 
@@ -131,7 +131,7 @@ psql -U rootadmin -d DeptDB -f insert_employee.sql
 psql -U rootadmin -d DeptDB -f insert_assets.sql
 psql -U rootadmin -d DeptDB -f insert_courses.sql
 ```
-# Note: If you need to reset the database, you can use the drop_commands.sql script:
+## Note: If you need to reset the database, you can use the drop_commands.sql script:
 ```bash
 psql -U rootadmin -d DeptDB -f drop_commands.sql
 ```
