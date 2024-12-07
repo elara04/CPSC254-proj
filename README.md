@@ -16,14 +16,20 @@ dept-dashboard-app/
 │   ├── package.json
 │   └── vue.config.js
 │
-└── backend/              # Express.js backend application
-    ├── routes/          # API route handlers
-    │   ├── employees.js
-    │   ├── assets.js
-    │   └── courses.js
-    ├── database.js      # Database configuration
-    ├── index.js         # Server entry point
-    └── package.json
+├── backend/              # Express.js backend application
+│   ├── routes/          # API route handlers
+│   │   ├── employees.js
+│   │   ├── assets.js
+│   │   └── courses.js
+│   ├── database.js      # Database configuration
+│   ├── index.js         # Server entry point
+│   └── package.json
+│
+└── sql/                 # SQL scripts for database setup
+├── drop_commands.sql    # Commands to drop tables and types
+├── insert_assets.sql    # Asset data insertion scripts
+├── insert_courses.sql   # Course data insertion scripts
+└── insert_employee.sql  # Employee data insertion scripts
 ```
 
 ## Prerequisites
@@ -77,7 +83,7 @@ sudo nano /etc/postgresql/[version]/main/pg_hba.conf
 sudo systemctl restart postgresql
 ```
 
-### Creating Database Schema
+### Creating Database Schema and Populating Data
 1. Connect to DeptDB as rootadmin:
 ```bash
 psql -U rootadmin -d DeptDB
@@ -114,6 +120,20 @@ CREATE TABLE Course (
     room VARCHAR(50),
     time VARCHAR(50)
 );
+```
+3. Populate the databse with inital data
+# Navigate to the sql directory
+```bash
+cd sql
+
+# Execute the SQL scripts in the following order:
+psql -U rootadmin -d DeptDB -f insert_employee.sql
+psql -U rootadmin -d DeptDB -f insert_assets.sql
+psql -U rootadmin -d DeptDB -f insert_courses.sql
+```
+# Note: If you need to reset the database, you can use the drop_commands.sql script:
+```bash
+psql -U rootadmin -d DeptDB -f drop_commands.sql
 ```
 
 ## Backend Installation
