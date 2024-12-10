@@ -25,14 +25,14 @@ app.use(express.json());
 // This contains all the endpoint definitions for employee, courses, and assest operations
 const employeeRoutes = require('./routes/employees');
 //const assetRoutes = require('./routes/assets'); 
-//const courseRoutes = require('./routes/courses'); 
+const courseRoutes = require('./routes/courses'); 
 
 // Mount the employee routes on the '/api' path
 // All employee routes will be prefixed with '/api'
 // Example: '/api/employees' will use the routes defined in employeeRoutes
 app.use('/api', employeeRoutes);
 //app.use('/api', assetRoutes);    // Mount asset routes alongside employee routes
-//app.use('/api', courseRoutes);
+app.use('/api', courseRoutes);
 
 // Set the port number
 // Use PORT from environment variables if available, otherwise use 3000
