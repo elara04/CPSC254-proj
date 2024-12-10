@@ -240,7 +240,7 @@ getInputPlaceholder() {
       this.showTable = false;
 
       try {
-        const response = await axios.get('http://localhost:4000/api/courses');
+        const response = await axios.get('http://localhost:3000/api/courses');
         this.courses = response.data;
         this.showTable = true;
       } catch (err) {
@@ -280,7 +280,7 @@ async searchCourse() {
       this.message = null;
       try {
         await axios.delete(
-          `http://localhost:4000/api/courses/${this.deleteValue}`
+          `http://localhost:3000/api/courses/${this.deleteValue}`
         );
         this.message = 'Course deleted successfully';
         this.showDeleteForm = false;
@@ -295,7 +295,7 @@ async searchCourse() {
 
     async submitNewCourse() {
       try {
-        await axios.post('http://localhost:4000/api/courses', this.newCourse);
+        await axios.post('http://localhost:3000/api/courses', this.newCourse);
         this.message = 'Course added successfully';
         this.newCourse = {
                 section_number: "",
