@@ -17,7 +17,7 @@ router.get('/assets', async (req, res) => {
     try {
         // Execute SQL query to select all records from employee table
         // 'await' pauses execution until query completes
-        const result = await pool.query('SELECT * FROM asset ORDER BY asset_id');
+        const result = await pool.query('SELECT * FROM asset ORDER BY asset.asset_id');
         
         // Send query results back to client as JSON
         // result.rows contains the array of employee records
@@ -38,31 +38,34 @@ router.get('/assets', async (req, res) => {
 
 // New enhanced search route that handles all search types
 router.get('/assets/search/:type/:value', async (req, res) => {
+
     try {
         const { type, value } = req.params;
+        console.log(value);
+
         let query = `
             SELECT 
-                asset.asset_id,
-                asset.category,
-                asset.purchase_year,
-                asset.manufacture,
-                asset.name,
-                asset.model,
-                asset.location,
-                asset.service_tag
+                Asset.asset_id,
+                Asset.category,
+                Asset.purchase_year,
+                Asset.manufacture,
+                Asset.name,
+                Asset.model,
+                Asset.location,
+                Asset.service_tag
             FROM 
-                asset
+                Asset
             WHERE `;
 
         let params = [];
         
         switch(type) {
             case 'asset_id':
-                query += 'asset.asset_id = $1';
+                query += 'Asset.asset_id = $1';
                 params = [value];
                 break;
             case 'service_tag':
-                query += 'LOWER(asset.serice_tag) = LOWER($1)';
+                query += 'LOWER(asset.service_tag) = LOWER($1)';
                 params = [value];
                 break;
             default:
@@ -81,10 +84,10 @@ router.get('/assets/search/:type/:value', async (req, res) => {
 
 router.post('/assets', async(req, res)=> {
     try {
-        const {asset_id, category, purchase_year, manufacture, name, model, location, service_tag}=req.body;
+        const {asset_id, category, purchase_year, manufacture, name, model, location, service_tag} = req.body;
 
-        const result=await pool.query(
-            'INSERT INTO asset (asset_id, category, puchase_year, manufacture, name, model, location, service_tag) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+        const result = await pool.query(
+            'INSERT INTO asset (asset_id, category, purchase_year, manufacture, name, model, location, service_tag) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
             [asset_id, category, purchase_year, manufacture, name, model, location, service_tag]
         );
 
@@ -96,24 +99,16 @@ router.post('/assets', async(req, res)=> {
 });
 
 // Delete asset
-router.delete('/assets/:type/:value', async (req, res) => {
+router.delete('/assets/:value', async (req, res) => {
     try {
-        const { type, value } = req.params;
-        let result;
+        const { value } = req.params;
 
-        if (type === 'asset_id') {
-            result = await pool.query(
+        const result = await pool.query(
                 'DELETE FROM asset WHERE asset_id = $1 RETURNING *',
                 [value]
             );
-        } else if (type === 'service_tag') {
-            result = await pool.query(
-                'DELETE FROM asset WHERE service_tag = $1 RETURNING *',
-                [value]
-            );
-        }
 
-        if (result.row.length === 0) {
+        if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Asset not found' });
         }
 
