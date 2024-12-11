@@ -76,7 +76,8 @@
             <select v-model="newAsset.category" required>
               <option value="">Select Category</option>
               <option value="PC">PC</option>
-              <option value="Laptop">Laptop</option>
+              <option value="Equipment">Equipment</option>
+              <option value="Monitor">Monitor</option>
             </select>
           </div>
           <div class="form-group">
