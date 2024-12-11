@@ -64,7 +64,7 @@
         </form>
       </div>
 
-      <div v-if="showAddAssets" class="from-container">
+      <div v-if="showAddAssets" class="form-container">
         <h3>Add New Asset</h3>
         <form @submit.prevent="submitNewAsset" class="add-asset">
           <div class="form-group">
@@ -123,6 +123,27 @@
         </form>
       </div>
 
+<!-- Delete asset -->
+       <div v-if="showDelete" class="form-container">
+        <h3>Delete Asset</h3>
+        <form @submit.prevent="deleteAsset" class="add-form">
+          <div class="form-group">
+            <label>Asset ID:</label>
+            <input
+              type="number"
+              v-model="deleteValue"
+              placeholder="Enter Asset ID"
+              required
+            >
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="action-button">Delete</button>
+            <button type="button" @click="showDelete=false" class="cancel-button">Cancel</button>
+          </div>
+        </form>
+       </div>
+
+
       <!-- Asset table - show when showAsset is true -->
       <div v-if="showAssets" class="table-container">
         <table>
@@ -153,25 +174,6 @@
         </table>
       </div>
 
-      <!-- Delete asset -->
-       <div v-if="showDelete" class="form-container">
-        <h3>Delete Asset</h3>
-        <form @submit.prevent="deleteAsset" class="add-form">
-          <div class="form-group">
-            <label>Asset ID:</label>
-            <input
-              type="number"
-              v-model="deleteValue"
-              placeholder="Enter Asset ID"
-              required
-            >
-          </div>
-          <div class="form-actions">
-            <button type="submit" class="action-button">Delete</button>
-            <button type="button" @click="showDelete=false" class="cancel-button">Cancel</button>
-          </div>
-        </form>
-       </div>
 
       <!-- Loading and erro sttes -->
       <div v-if="loading" class="message">Loading...</div>
@@ -263,18 +265,19 @@ export default {
         this.loading = false;
       }
     },
+
     async searchAssets() {
       this.loading = true;
       this.error = null;
       this.message = null;
       try {
-        let endpoint = 'http://localhost:3000/api/assets/search/${this.searchType}/${encodeURIComponent(this.searchValue)}';
+        let endpoint = `http://localhost:3000/api/assets/search/${this.searchType}/${encodeURIComponent(this.searchValue)}`;
         const response = await axios.get(endpoint);
         this.assets = response.data;
-        if (this.assets.legth === 0) {
+        if (this.assets.length === 0) {
           this.error = 'No matching asset found';
         }
-        this,this.showAssets = true;
+        this.showAssets = true;
         this.showSearch = false;
       } catch (err) {
         this.error = 'Error searching assets: ' + err.message;
@@ -282,6 +285,7 @@ export default {
         this.loading = false;
       }
     },
+
     async deleteAsset() {
       if (!confirm('Are you sure you want to delete this asset?')) {
         return;
@@ -292,7 +296,7 @@ export default {
       this.message = null;
       try {
         await axios.delete(
-          'http://localhost:3000/api/assets/${this.deleteValue}'
+          `http://localhost:3000/api/assets/${this.deleteValue}`
         );
         this.message = 'Asset deleted successfully';
         this.showDelete = false;
@@ -304,19 +308,20 @@ export default {
         this.deleteValue = '';
       }
     },
+
     async submitNewAsset() {
       try {
         await axios.post('http://localhost:3000/api/assets', this.newAsset);
         // reset assets form
         this.newAsset = {
-          asset_id: '',
-          category: '',
-          purchase_year: '',
-          manufacture: '',
-          name: '',
-          model: '',
-          location: '',
-          service_tag: ''
+          asset_id: "",
+          category: "",
+          purchase_year: "",
+          manufacture: "",
+          name: "",
+          model: "",
+          location: "",
+          service_tag: ""
         };
         this.showAddAssets = false;
         // refresh assets list
