@@ -2,6 +2,10 @@
 
 A web application for managing department assets, employees, and courses. Built with Vue.js frontend and Express/PostgreSQL backend.
 
+# Github url to public project
+
+https://github.com/elara04/CPSC254-proj
+
 ## Project Structure
 
 ```
