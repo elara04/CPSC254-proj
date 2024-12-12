@@ -107,7 +107,7 @@
           </div>
           <div class="form-group">
             <label>Model:</label>
-            <input type="text" v-model="newAsset.model" maxlength="4" required>
+            <input type="text" v-model="newAsset.model" required>
           </div>
           <div class="form-group">
             <label>Location:</label>
